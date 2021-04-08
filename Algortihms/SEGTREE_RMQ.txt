@@ -1,0 +1,42 @@
+// zero based indexing
+// to build segtree use update function 
+
+const ll INF=1e18;
+struct segtree
+{
+    int n;
+    vector<ll> t;
+    void build(int n){
+        this->n=n;
+        t.clear();
+        t.resize(4*n+10,INF);
+    }
+    ll minq(int v, int tl, int tr, int l, int r) {
+        if (l > r)
+            return INF;
+        if (l == tl && r == tr) {
+            return t[v];
+        }
+        int tm = (tl + tr) / 2;
+        return min(minq(v*2, tl, tm, l, min(r, tm))
+               ,minq(v*2+1, tm+1, tr, max(l, tm+1), r));
+    }
+    ll query(int l , int r){
+        return minq(1,0,n-1,l,r);
+    }
+    void upd(int v, int tl, int tr, int pos, ll new_val) {
+        if (tl == tr) {
+            t[v]=new_val;
+        } else {
+            int tm = (tl + tr) / 2;
+            if (pos <= tm)
+                upd(v*2, tl, tm, pos, new_val);
+            else
+                upd(v*2+1, tm+1, tr, pos, new_val);
+            t[v] = min(t[v*2] , t[v*2+1]);
+        }
+    }
+    void update(int pos, ll new_val){
+        upd(1,0,n-1,pos,new_val);
+    }
+};

@@ -1,0 +1,30 @@
+struct Fraction {
+  ll a, b;
+  Fraction(ll a, ll b) {
+    if (b < 0) {
+      a = -a;
+      b = -b;
+    }
+    int g = gcd(abs(a), abs(b));
+    this->a = a / g;
+    this->b = b / g;
+  };
+  bool operator<(const Fraction &other) const {
+    return (ll)a * other.b < (ll)b * other.a;
+  }
+  bool operator<=(const Fraction &other) const {
+    return (ll)a * other.b <= (ll)b * other.a;
+  }
+  bool operator>(const Fraction &other) const {
+    return (ll)a * other.b > (ll)b * other.a;
+  }
+  bool operator>=(const Fraction &other) const {
+    return (ll)a * other.b >= (ll)b * other.a;
+  }
+  bool operator!=(const Fraction &other) const {
+    return (ll)a * other.b != (ll)b * other.a;
+  }
+  bool operator==(const Fraction &other) const {
+    return (ll)a * other.b == (ll)b * other.a;
+  }
+};

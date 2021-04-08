@@ -1,0 +1,57 @@
+
+SEE : https://codeforces.com/contest/617/submission/15550846
+
+void remove(idx);  // TODO: remove value at idx from data structure
+void add(idx);     // TODO: add value at idx from data structure
+int get_answer();  // TODO: extract the current answer of the data structure
+
+const int BLOCK_SIZE = 316 //sqrt(N)
+// IMP: don't compute the block size at runtime - make it const. Division by constants is well optimized by compilers
+
+struct Query {
+    int l, r, idx;
+    bool operator<(Query other) const
+    {
+        return make_pair(l / block_size, r) <
+               make_pair(other.l / block_size, other.r);
+    }
+};
+
+vector<int> mo_s_algorithm() {
+
+    vector< vector<Query> > blocks(n / BLOCK_SIZE + 2, vector<Query>());
+    for (int i = 0; i < m; i++) {
+        int left, right;
+        cin >> left >> right;
+        left--; right++;
+        blocks[left / BLOCK_SIZE].push_back(Query{left, right, i});
+    }
+    for (auto &i: blocks) {
+        sort(i.begin(), i.end());
+    }
+ 
+    vector<long long> answer(m);
+    for (int i = 0; i < blocks.size(); i++) {
+        int left, right;
+        left = right = i * BLOCK_SIZE;
+        for (auto &q: blocks[i]) {
+            while (right < q.right) {
+                add(pref[right]);
+                right++;
+            }
+            while (left < q.left) {
+                del(pref[left]);
+                left++;
+            }
+            while (left > q.left) {
+                left--;
+                add(pref[left]);
+            }
+            answer[q.number] = result;
+        }
+        for (int j = left; j < right; j++) {
+            del(pref[j]);
+        }
+    }
+return answer;
+}

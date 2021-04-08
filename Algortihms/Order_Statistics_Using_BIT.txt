@@ -1,0 +1,52 @@
+vector<ll> BIT;
+
+void update(ll i, ll add)
+{
+    while (i > 0 && i < BIT.size())
+    {
+        BIT[i] += add;
+        i = i + (i & (-i));
+    }
+}
+
+ll sum(ll i)
+{
+    ll ans = 0;
+    while (i > 0)
+    {
+        ans += BIT[i];
+        i = i - (i & (-i));
+    }
+
+    return ans;
+}
+ll findKthSmallest(ll k)
+{
+    ll l = 0;
+    ll h = BIT.size();
+    while (l < h)
+    {
+        ll mid = (l + h) / 2;
+        if (k <= sum(mid))
+            h = mid;
+        else
+            l = mid+1;
+    }
+
+    return l;
+}
+
+void insertElement(ll x)
+{
+    update(x, 1);
+}
+
+void deleteElement(ll x)
+{
+    update(x, -1);
+}
+
+ll findRank(ll x)
+{
+    return sum(x);
+}

@@ -1,0 +1,29 @@
+const int N = 202, Mod = 1e9 + 7; // N*N matrix
+struct Matrix
+{
+	int n, m, A[N][N];
+	inline Matrix(int _n = 0, int _m = 0) : n(_n), m(_m) {memset(A, 0, sizeof(A));}
+	inline Matrix operator * (Matrix &X)
+	{
+	    Matrix R(n, X.m);
+	    for (int i = 0; i < n; i ++)
+	        for (int k = 0; k < m; k ++)
+	            for (int j = 0; j < X.m; j ++)
+	                R[i][j] = (R[i][j] + 1LL * A[i][k] * X[k][j]) % Mod;
+	    return (R);
+	}
+	inline Matrix operator ^ (long long Pw)
+	{
+	    Matrix R(n, n), T = * this;
+	    for (int i = 0; i < n; i ++)
+	        R[i][i] = 1;
+	    for (; Pw; Pw >>= 1, T = T * T)
+	        if (Pw & 1)
+	            R = R * T;
+	    return (R);
+	}
+	inline int * operator [] (int i)
+	{
+	    return (A[i]);
+	}
+};

@@ -1,0 +1,43 @@
+const int MAX = 1e5+10;
+vector<int> mu(MAX,0);
+
+void mob_pre()
+{
+    mu[1] = 1;
+    for(int i=1; i<MAX; i++){
+
+        if( mu[i] == 0 ) continue;
+
+        for(int j=2*i; j<MAX; j+=i) {
+            mu[j] -= mu[i];
+        }
+    }
+}
+
+int get_mob(ll x){
+    if(x<MAX) return mu[x];
+    for(ll i=2; i*i<=x; i++){
+        if(x%i == 0){
+            int c=0;
+            while(x%i==0){
+                x/=i;
+                ++c;
+            }
+            return -1*(c<=1)*get_mob(x);
+        }
+    }
+    return -1;
+}
+// euler totient function
+vector<int> phi(MAX,0);
+void phi_pre() 
+{
+    phi[0] = 0;
+    phi[1] = 1;
+    for (int i = 2; i <MAX ; i++)
+        phi[i] = i - 1;
+
+    for (int i = 2; i <MAX; i++)
+        for (int j = 2 * i; j <MAX; j += i)
+              phi[j] -= phi[i];
+}
